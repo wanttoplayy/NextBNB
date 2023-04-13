@@ -1,11 +1,11 @@
 import { Nunito } from "next/font/google";
-
-import './globals.css'
+import "./globals.css";
+import Navbar from "./components/Navbar/Navbar";
 
 export const metadata = {
-  title: 'Modumart',
-  description: 'Korea Online Mart',
-}
+  title: "Modumart",
+  description: "Korea Online Mart",
+};
 
 const font = Nunito({
   subsets: ["latin"],
@@ -14,11 +14,14 @@ const font = Nunito({
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en">
-      <body className={font.className}>{children}</body>
+      <body className={font.className}>
+        <Navbar />
+        {children}
+      </body>
     </html>
-  )
+  );
 }
