@@ -1,6 +1,8 @@
 import { Nunito } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/Navbar/Navbar";
+import ClientOnly from "./components/clientOnly";
+import RegisterModal from "./components/modals/RegisterModal";
 
 export const metadata = {
   title: "Modumart",
@@ -19,7 +21,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={font.className}>
-        <Navbar />
+        <ClientOnly>
+          <RegisterModal />
+          <Navbar />
+        </ClientOnly>
         {children}
       </body>
     </html>
