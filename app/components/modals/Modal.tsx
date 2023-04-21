@@ -7,7 +7,7 @@ import Button from "../Button";
 interface ModalProps {
   isOpen?: boolean;
   onClose: () => void;
-  onSumit: () => void;
+  onSubmit: () => void;
   title?: string;
   body?: React.ReactElement;
   footer?: React.ReactElement;
@@ -20,7 +20,7 @@ interface ModalProps {
 const Modal: React.FC<ModalProps> = ({
   isOpen,
   onClose,
-  onSumit,
+  onSubmit,
   title,
   body,
   footer,
@@ -51,8 +51,8 @@ const Modal: React.FC<ModalProps> = ({
       return;
     }
 
-    onSumit();
-  }, [disabled, onSumit]);
+    onSubmit();
+  }, [disabled, onSubmit]);
 
   const handleSecondaryAction = useCallback(() => {
     if (disabled || !secondaryAction) {
@@ -90,7 +90,7 @@ const Modal: React.FC<ModalProps> = ({
             md:w-4/6
             lg:w-3/6
             xl:w-2/5
-            my-6
+            my-20
             mx-auto
             h-full
             lg:h-auto
@@ -102,7 +102,7 @@ const Modal: React.FC<ModalProps> = ({
             className={`
                       translate
                       duration-300
-                      h-full
+                      h-90
                       ${showModal ? "translate-y-0" : "translate-y-full"}
                       ${showModal ? "opacity-100" : "opacity-0"}
                       `}
@@ -114,7 +114,7 @@ const Modal: React.FC<ModalProps> = ({
                       lg:h-auto
                       md:h-auto
                       border-0
-                      rounded-lg
+                      rounded-t
                       shadow-lg
                       relative
                       flex
@@ -152,9 +152,9 @@ const Modal: React.FC<ModalProps> = ({
               </div>
             </div>
             {/* {BODY} */}
-            <div className="relative p-6 flex-auto">{body}</div>
+            <div className="relative p-6 flex-auto bg-white">{body}</div>
             {/* {FOOTER} */}
-            <div className="flex flex-col gap-2 p-6">
+            <div className="flex flex-col gap-2 p-6 bg-white rounded-b">
               <div
                 className="
               flex
@@ -178,6 +178,7 @@ const Modal: React.FC<ModalProps> = ({
                   onClick={handleSubmit}
                 />
               </div>
+              {footer}
             </div>
           </div>
         </div>
