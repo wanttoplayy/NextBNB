@@ -3,6 +3,7 @@ import "./globals.css";
 import Navbar from "./components/Navbar/Navbar";
 import ClientOnly from "./components/clientOnly";
 import RegisterModal from "./components/modals/RegisterModal";
+import ToasterProvider from "./provider/ToasterProvider";
 
 export const metadata = {
   title: "Modumart",
@@ -22,6 +23,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={font.className}>
         <ClientOnly>
+          <ToasterProvider />
           <RegisterModal />
           <Navbar />
         </ClientOnly>
