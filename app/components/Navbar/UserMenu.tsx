@@ -1,12 +1,21 @@
 "use client";
+
 import { AiOutlineMenu } from "react-icons/ai";
 import Avatar from "../Avatar";
 import { useCallback, useState } from "react";
 import MenuItem from "./MenuItem";
 import useRegisterModal from "@/app/hooks/useRegisterModal";
+import useLoginModal from "@/app/hooks/useLoginModal";
+import { User } from "@prisma/client";
+import { signOut } from "next-auth/react";
 
-const UserMenu = () => {
+interface UserMunuProps {
+  currentUser?: User | null;
+}
+
+const UserMenu: React.FC<UserMunuProps> = ({ currentUser }) => {
   const registerModal = useRegisterModal();
+  const loginModal = useLoginModal();
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleOpen = useCallback(() => {
@@ -31,7 +40,7 @@ const UserMenu = () => {
                 cursor-pointer
                 "
         >
-          สมาชิก
+          สมาชิก/Member
         </div>
         <div
           onClick={toggleOpen}
@@ -63,7 +72,7 @@ const UserMenu = () => {
               rounded-xl
               shadow-md
               w-[40vw]
-              md:w-3/4
+              md:w-4/5
               bg-white
               overflow-hidden
               right-0
@@ -71,11 +80,39 @@ const UserMenu = () => {
               text-sm
               "
         >
-          <div className="flex flex-col cursor-pointer"></div>
-          <>
-            <MenuItem onClick={() => {}} label="LOGIN" />
-            <MenuItem onClick={registerModal.onOpen} label="SIGN UP" />
-          </>
+          <div className="flex flex-col cursor-pointer">
+            {currentUser ? (
+              <>
+                <MenuItem
+                  onClick={() => {}}
+                  label="การจัดการสมาชิก/Account Managment"
+                />
+                <MenuItem onClick={() => {}} label="ตระกร้าสินค้า/Wishlist" />
+                <MenuItem onClick={() => {}} label="การชำระเงิน/Payment" />
+                <MenuItem
+                  onClick={() => {}}
+                  label="สถานะการจัดส่ง/Parcel status"
+                />
+                <MenuItem
+                  onClick={() => {}}
+                  label="ประวัติการซื้อสินค้า/History"
+                />
+                <hr />
+                <MenuItem onClick={() => signOut} label="ออกจากระบบ/Log out" />
+              </>
+            ) : (
+              <>
+                <MenuItem
+                  onClick={loginModal.onOpen}
+                  label="เข้าสู่ระบบ/LOGIN"
+                />
+                <MenuItem
+                  onClick={registerModal.onOpen}
+                  label="สมัครสมาชิก/SIGN UP"
+                />
+              </>
+            )}
+          </div>
         </div>
       )}
     </div>
