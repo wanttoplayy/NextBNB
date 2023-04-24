@@ -35,7 +35,7 @@ const LoginModal = () => {
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setIsLoading(true);
 
-    signIn("credectials", {
+    signIn("credentials", {
       ...data,
       redirect: false,
     }).then((callback) => {
@@ -52,7 +52,6 @@ const LoginModal = () => {
       }
     });
   };
-
   const bodyContent = (
     <div className="flex flex-col gap-4">
       <Heading title="Welcome to ModuMart" subtitle="เข้าสู่ระบบสมาชิก" />
