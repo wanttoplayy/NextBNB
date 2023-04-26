@@ -52,6 +52,12 @@ const LoginModal = () => {
       }
     });
   };
+
+  const toggle = useCallback(() => {
+    loginModal.onClose();
+    registerModal.onOpen();
+  }, [loginModal, registerModal]);
+
   const bodyContent = (
     <div className="flex flex-col gap-4">
       <Heading title="Welcome to ModuMart" subtitle="เข้าสู่ระบบสมาชิก" />
@@ -82,7 +88,7 @@ const LoginModal = () => {
         outline
         label="Continue with Google"
         icon={FcGoogle}
-        onClick={() => {}}
+        onClick={() => signIn("google")}
       />
       <Button
         outline
@@ -106,15 +112,15 @@ const LoginModal = () => {
         gap-2
         "
         >
-          <div>Already have an account?</div>
+          <div>ลูกค้าใหม่ ต้องการสมัครสมาชิก?</div>
           <div
-            onClick={registerModal.onClose}
+            onClick={toggle}
             className="
           text-neutral-800
           cursor-pointer
           hover:underline"
           >
-            Login here
+            สมัครสมาชิก
           </div>
         </div>
       </div>
