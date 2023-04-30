@@ -6,6 +6,7 @@ import { useCallback, useState } from "react";
 import MenuItem from "./MenuItem";
 import useRegisterModal from "@/app/hooks/useRegisterModal";
 import useLoginModal from "@/app/hooks/useLoginModal";
+import useAddItemModal from "@/app/hooks/useAddItemModal";
 import { signOut } from "next-auth/react";
 import { SafeUser } from "@/app/types";
 
@@ -16,17 +17,25 @@ interface UserMunuProps {
 const UserMenu: React.FC<UserMunuProps> = ({ currentUser }) => {
   const registerModal = useRegisterModal();
   const loginModal = useLoginModal();
+  const addItemModal = useAddItemModal();
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleOpen = useCallback(() => {
     setIsOpen((value) => !value);
   }, []);
 
+  const onAddItem = useCallback(() => {
+    if (!currentUser) {
+      return loginModal.onOpen();
+    }
+    addItemModal.onOpen();
+  }, [currentUser, loginModal, addItemModal]);
+
   return (
     <div className="relative">
       <div className="flex flex-row items-center gap-3">
         <div
-          onClick={() => {}}
+          onClick={onAddItem}
           className="
                 hidden
                 md:block
@@ -86,6 +95,10 @@ const UserMenu: React.FC<UserMunuProps> = ({ currentUser }) => {
                 <MenuItem
                   onClick={() => {}}
                   label="การจัดการสมาชิก/Account Managment"
+                />
+                <MenuItem
+                  onClick={addItemModal.onOpen}
+                  label="การจัดการสินค้า/Item Managment"
                 />
                 <MenuItem onClick={() => {}} label="ตระกร้าสินค้า/Wishlist" />
                 <MenuItem onClick={() => {}} label="การชำระเงิน/Payment" />

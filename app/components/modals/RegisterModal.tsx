@@ -1,7 +1,7 @@
 "use client";
 
 import axios from "axios";
-import { AiFillGithub } from "react-icons/ai";
+import { FaFacebook } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { useCallback, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
@@ -94,9 +94,9 @@ const RegisterModal = () => {
       />
       <Button
         outline
-        label="Continue with GitHub"
-        icon={AiFillGithub}
-        onClick={() => {}}
+        label="Continue with Facebook"
+        icon={FaFacebook}
+        onClick={() => signIn("facebook")}
       />
       <div
         className="
