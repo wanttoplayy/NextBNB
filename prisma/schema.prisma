@@ -46,18 +46,14 @@ model Account {
 }
 
 model Listing {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
-  title         String
-  description   String
-  imageSrc      String
-  createdAt     DateTime @default(now())
-  category      String
-  roomCount     Int
-  bathroomCount Int
-  guestCount    Int
-  locationValue String
-  userId        String   @db.ObjectId
-  price         Int
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  imageSrc    String
+  createdAt   DateTime @default(now())
+  category    String
+  userId      String   @db.ObjectId
+  price       Int
 
   user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   reservations Reservation[]
@@ -67,8 +63,9 @@ model Reservation {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
   userId     String   @db.ObjectId
   listingId  String   @db.ObjectId
-  startDate  DateTime
-  endDate    DateTime
+  title      String
+  category   String
+  quatity    Int
   totalPrice Int
   createdAt  DateTime @default(now())
 
