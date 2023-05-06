@@ -65,7 +65,7 @@ model Reservation {
   listingId  String   @db.ObjectId
   title      String
   category   String
-  quatity    Int
+  quantity   Int
   totalPrice Int
   createdAt  DateTime @default(now())
 

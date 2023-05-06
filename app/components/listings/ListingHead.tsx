@@ -1,3 +1,5 @@
+"use client";
+
 import { SafeListing, SafeUser } from "@/app/types";
 import { Listing, Reservation } from "@prisma/client";
 import { useMemo } from "react";
@@ -25,6 +27,7 @@ const ListingHead: React.FC<ListingHeadProps> = ({
       <Heading title={title} />
       <div
         className="
+      
           w-full
           h-[60vh]
           overflow-hidden 

@@ -8,10 +8,11 @@ import { categories } from "../Navbar/Categories";
 import CategoryInput from "../Inputs/CategoryInput";
 import { SubmitHandler, FieldValues, useForm } from "react-hook-form";
 import ImageSelect from "../Inputs/ImageSelect";
-import Input from "../Inputs/Input";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
+import Input from "../Inputs/Input";
+import DescriptionInput from "../Inputs/DescriptionInput";
 
 enum STEPS {
   CATEGORY = 0,
@@ -184,7 +185,7 @@ const AddItemModal = () => {
           required
         />
         <hr />
-        <Input
+        <DescriptionInput
           id="description"
           label="รายละเอียดสินค้า"
           disabled={isloading}

@@ -1,7 +1,7 @@
 import getListingById from "@/app/actions/getListingById";
 import getCurrentUser from "@/app/actions/getCurrentUser";
 
-import ClientOnly from "../../components/clientOnly";
+import ClientOnly from "../../components/ClientOnly";
 import EmptyState from "../../components/EmptyState";
 import ListingClient from "./ListingClient";
 
@@ -22,7 +22,7 @@ const ListingPage = async ({ params }: { params: IParams }) => {
   }
   return (
     <ClientOnly>
-      <ListingClient listing={listing} currenrtUser={currentUser} />
+      <ListingClient listing={listing} />
     </ClientOnly>
   );
 };
