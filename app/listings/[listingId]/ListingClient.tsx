@@ -1,7 +1,6 @@
 "use client";
 
-import { Reservation } from "@prisma/client";
-import { SafeListing, SafeUser } from "@/app/types";
+import { SafeListing, SafeReservation, SafeUser } from "@/app/types";
 import useLoginModal from "@/app/hooks/useLoginModal";
 import { useRouter } from "next/navigation";
 import { useCallback, useMemo, useState } from "react";
@@ -15,7 +14,7 @@ import toast from "react-hot-toast";
 import Input from "@/app/components/Inputs/Input";
 
 interface ListingClientProps {
-  reservations?: Reservation[];
+  reservations?: SafeReservation;
   listing: SafeListing & {
     user: SafeUser;
   };
@@ -31,7 +30,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [totalPrice, setTotalPrice] = useState(listing.price);
-  const [quantity, setTotalQuantity] = useState(reservations);
+  const [quantity, setQuantity] = useState(reservations);
 
   const category = useMemo(() => {
     return categories.find((items) => items.label === listing.category);
@@ -51,7 +50,9 @@ const ListingClient: React.FC<ListingClientProps> = ({
       })
       .then(() => {
         toast.success("Listing reserved!");
-        // router.push("/trips");
+        setQuantity(reservations);
+        router.push("/Basket");
+        router.refresh();
       })
       .catch(() => {
         toast.error("Something went wrong.");

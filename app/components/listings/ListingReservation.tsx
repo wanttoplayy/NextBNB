@@ -3,6 +3,7 @@ import Button from "../Button";
 
 interface ListingReservationProps {
   price: number;
+  totlePrice: number;
   dateRange: Range;
   onChangeDate: (value: Range) => void;
   onSubmit: () => void;

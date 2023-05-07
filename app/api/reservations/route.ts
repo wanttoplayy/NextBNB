@@ -11,9 +11,9 @@ export async function POST(request: Request) {
   }
 
   const body = await request.json();
-  const { listingId, startDate, endDate, quantity, totalPrice } = body;
+  const { listingId, quantity, totalPrice } = body;
 
-  if (!listingId || !startDate || !endDate || !quantity || !totalPrice) {
+  if (!listingId || !quantity || !totalPrice) {
     return NextResponse.error();
   }
 
@@ -25,10 +25,8 @@ export async function POST(request: Request) {
       reservations: {
         create: {
           userId: currentUser.id,
-          startDate,
-          endDate,
-          quantity,
-          totalPrice,
+          quantity: Number(quantity),
+          totalPrice: Number(totalPrice),
         },
       },
     },

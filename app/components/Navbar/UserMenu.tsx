@@ -9,12 +9,14 @@ import useLoginModal from "@/app/hooks/useLoginModal";
 import useAddItemModal from "@/app/hooks/useAddItemModal";
 import { signOut } from "next-auth/react";
 import { SafeUser } from "@/app/types";
+import { useRouter } from "next/navigation";
 
 interface UserMunuProps {
   currentUser?: SafeUser | null;
 }
 
 const UserMenu: React.FC<UserMunuProps> = ({ currentUser }) => {
+  const router = useRouter();
   const registerModal = useRegisterModal();
   const loginModal = useLoginModal();
   const addItemModal = useAddItemModal();
@@ -100,7 +102,10 @@ const UserMenu: React.FC<UserMunuProps> = ({ currentUser }) => {
                   onClick={addItemModal.onOpen}
                   label="การจัดการสินค้า/Item Managment"
                 />
-                <MenuItem onClick={() => {}} label="ตระกร้าสินค้า/Wishlist" />
+                <MenuItem
+                  onClick={() => router.push("/Basket")}
+                  label="ตระกร้าสินค้า/Wishlist"
+                />
                 <MenuItem onClick={() => {}} label="การชำระเงิน/Payment" />
                 <MenuItem
                   onClick={() => {}}
