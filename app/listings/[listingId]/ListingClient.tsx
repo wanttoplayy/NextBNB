@@ -104,8 +104,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
                 totalPrice={totalPrice}
                 onSubmit={onCreateReservation}
                 disabled={isLoading}
-
-                // quantity={quantity}
+                quantity={quantity}
               />
             </div>
           </div>
