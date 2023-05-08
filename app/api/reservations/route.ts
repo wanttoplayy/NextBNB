@@ -24,13 +24,16 @@ export async function POST(request: Request) {
     data: {
       reservations: {
         create: {
-          userId: currentUser.id,
+          title: "Reservation Title",
+          category: "Reservation Category",
           quantity: Number(quantity),
           totalPrice: Number(totalPrice),
+          user: {
+            connect: { id: currentUser.id },
+          },
         },
       },
     },
   });
-
   return NextResponse.json(listingAndReservation);
 }
