@@ -51,7 +51,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
       .then(() => {
         toast.success("Listing reserved!");
         setQuantity(reservations);
-        router.push("/Basket");
+        router.push("/");
         router.refresh();
       })
       .catch(() => {

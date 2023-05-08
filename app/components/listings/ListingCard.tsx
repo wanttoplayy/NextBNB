@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useMemo } from "react";
 import Image from "next/image";
 import HeartButton from "../HeartButton";
+import { User } from "next-auth";
 
 interface ListingCardProps {
   data: SafeListing;

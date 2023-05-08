@@ -51,7 +51,7 @@ const BasketClient: React.FC<BasketClientProps> = ({
       />
       <div
         className="
-          mt-10
+          mt-[50px]
           grid 
           grid-cols-1 
           sm:grid-cols-2 

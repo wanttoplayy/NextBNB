@@ -103,7 +103,7 @@ const UserMenu: React.FC<UserMunuProps> = ({ currentUser }) => {
                   label="การจัดการสินค้า/Item Managment"
                 />
                 <MenuItem
-                  onClick={() => router.push("/Basket")}
+                  onClick={() => router.push("/basket")}
                   label="ตระกร้าสินค้า/Wishlist"
                 />
                 <MenuItem onClick={() => {}} label="การชำระเงิน/Payment" />

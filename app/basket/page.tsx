@@ -1,3 +1,4 @@
+import { FC } from "react";
 import EmptyState from "@/app/components/EmptyState";
 import ClientOnly from "@/app/components/ClientOnly";
 
@@ -6,7 +7,7 @@ import getReservations from "@/app/actions/getReservations";
 
 import BasketClient from "./BasketClient";
 
-const BasketPage = async () => {
+const BasketPage: FC = async () => {
   const currentUser = await getCurrentUser();
 
   if (!currentUser) {
