@@ -14,7 +14,7 @@ import toast from "react-hot-toast";
 import Input from "@/app/components/Inputs/Input";
 
 interface ListingClientProps {
-  reservations?: SafeReservation;
+  reservation?: SafeReservation;
   listing: SafeListing & {
     user: SafeUser;
   };
@@ -23,14 +23,14 @@ interface ListingClientProps {
 
 const ListingClient: React.FC<ListingClientProps> = ({
   listing,
-  reservations,
+  reservation,
   currentUser,
 }) => {
   const loginModal = useLoginModal();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [totalPrice, setTotalPrice] = useState(listing.price);
-  const [quantity, setQuantity] = useState(reservations);
+  const [quantity, setQuantity] = useState(reservation?.quantity);
 
   const category = useMemo(() => {
     return categories.find((items) => items.label === listing.category);
@@ -45,12 +45,12 @@ const ListingClient: React.FC<ListingClientProps> = ({
     axios
       .post("/api/reservations", {
         totalPrice,
-        quantity: reservations,
+        quantity: quantity,
         listingId: listing?.id,
       })
       .then(() => {
         toast.success("Listing reserved!");
-        setQuantity(reservations);
+        setQuantity(quantity);
         router.push("/Basket");
         router.refresh();
       })
@@ -60,7 +60,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
       .finally(() => {
         setIsLoading(false);
       });
-  }, [totalPrice, listing?.id, router, currentUser, loginModal]);
+  }, [totalPrice, listing?.id, router, currentUser, loginModal, quantity]);
 
   return (
     <Container>
