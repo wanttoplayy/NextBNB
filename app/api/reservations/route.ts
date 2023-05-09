@@ -11,9 +11,9 @@ export async function POST(request: Request) {
   }
 
   const body = await request.json();
-  const { listingId, quantity, totalPrice } = body;
+  const { listingId, quantity, totalPrice, title, category } = body;
 
-  if (!listingId || !quantity || !totalPrice) {
+  if (!listingId || !quantity || !totalPrice || !title || !category) {
     return NextResponse.error();
   }
 
@@ -24,8 +24,8 @@ export async function POST(request: Request) {
     data: {
       reservations: {
         create: {
-          title: "Reservation Title",
-          category: "Reservation Category",
+          title: title, // Use the title from the request body
+          category: category, // Use the category from the request body
           quantity: Number(quantity),
           totalPrice: Number(totalPrice),
           user: {

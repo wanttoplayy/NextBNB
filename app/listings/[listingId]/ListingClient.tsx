@@ -30,7 +30,12 @@ const ListingClient: React.FC<ListingClientProps> = ({
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [totalPrice, setTotalPrice] = useState(listing.price);
-  const [quantity, setQuantity] = useState(reservations);
+  const [quantity, setQuantity] = useState(1);
+
+  const onQuantityChange = (value: number) => {
+    setQuantity(value);
+    setTotalPrice(listing.price * value);
+  };
 
   const category = useMemo(() => {
     return categories.find((items) => items.label === listing.category);
@@ -42,15 +47,19 @@ const ListingClient: React.FC<ListingClientProps> = ({
     }
     setIsLoading(true);
 
+    axios;
     axios
       .post("/api/reservations", {
         totalPrice,
-        quantity: reservations,
+        quantity,
         listingId: listing?.id,
+        title: listing.title,
+        category: listing.category,
       })
       .then(() => {
         toast.success("Listing reserved!");
-        setQuantity(reservations);
+        // Remove the line below
+        // setQuantity(reservations);
         router.push("/");
         router.refresh();
       })
@@ -106,6 +115,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
                 onSubmit={onCreateReservation}
                 disabled={isLoading}
                 quantity={quantity}
+                onQuantityChange={onQuantityChange}
               />
             </div>
           </div>

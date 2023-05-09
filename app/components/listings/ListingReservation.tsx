@@ -3,35 +3,30 @@ import Button from "../Button";
 
 interface ListingReservationProps {
   price: number;
-  totlePrice: number;
-  dateRange: Range;
-  onChangeDate: (value: Range) => void;
+  totalPrice: number;
   onSubmit: () => void;
   disabled?: boolean;
-  disabledDates: Date[];
+  quantity: number;
+  onQuantityChange: (value: number) => void;
 }
 
 const ListingReservation: React.FC<ListingReservationProps> = ({
   price,
-  dateRange,
-  onChangeDate,
+  totalPrice,
   onSubmit,
   disabled,
-  disabledDates,
+  quantity,
+  onQuantityChange,
 }) => {
-  const [items, setItems] = useState(1);
-
   const increaseItems = () => {
-    setItems(items + 1);
+    onQuantityChange(quantity + 1);
   };
 
   const decreaseItems = () => {
-    if (items > 1) {
-      setItems(items - 1);
+    if (quantity > 1) {
+      onQuantityChange(quantity - 1);
     }
   };
-
-  const totalPrice = price * items;
 
   return (
     <div
@@ -61,9 +56,9 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
         <Button
           label="-"
           onClick={decreaseItems}
-          disabled={disabled || items <= 1}
+          disabled={disabled || quantity <= 1}
         />
-        <div className="font-semibold text-neutral-600">{items}</div>
+        <div className="font-semibold text-neutral-600">{quantity}</div>
         <Button label="+" onClick={increaseItems} disabled={disabled} />
       </div>
       <hr />
