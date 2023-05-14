@@ -10,6 +10,7 @@ import useAddItemModal from "@/app/hooks/useAddItemModal";
 import { signOut } from "next-auth/react";
 import { SafeUser } from "@/app/types";
 import { useRouter } from "next/navigation";
+import useVerifyPaymentAndAddressModal from "@/app/hooks/useVerifyPaymentAndAddress";
 
 interface UserMunuProps {
   currentUser?: SafeUser | null;
@@ -20,6 +21,7 @@ const UserMenu: React.FC<UserMunuProps> = ({ currentUser }) => {
   const registerModal = useRegisterModal();
   const loginModal = useLoginModal();
   const addItemModal = useAddItemModal();
+  const verrifyPaymentAndAddressModal = useVerifyPaymentAndAddressModal();
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleOpen = useCallback(() => {
@@ -32,6 +34,13 @@ const UserMenu: React.FC<UserMunuProps> = ({ currentUser }) => {
     }
     addItemModal.onOpen();
   }, [currentUser, loginModal, addItemModal]);
+
+  const onVerrifyPaymentAndAddress = useCallback(() => {
+    if (!currentUser) {
+      return loginModal.onOpen();
+    }
+    verrifyPaymentAndAddressModal.onOpen();
+  }, [currentUser, loginModal, verrifyPaymentAndAddressModal]);
 
   return (
     <div className="relative">
@@ -96,7 +105,7 @@ const UserMenu: React.FC<UserMunuProps> = ({ currentUser }) => {
               <>
                 <MenuItem
                   onClick={() => {}}
-                  label="การจัดการสมาชิก/Account Managment"
+                  label="การจัดการคำสั่งซื้อ/Order Managment"
                 />
                 <MenuItem
                   onClick={addItemModal.onOpen}
@@ -112,8 +121,8 @@ const UserMenu: React.FC<UserMunuProps> = ({ currentUser }) => {
                   label="สถานะการจัดส่ง/Parcel status"
                 />
                 <MenuItem
-                  onClick={() => {}}
-                  label="ประวัติการซื้อสินค้า/History"
+                  onClick={verrifyPaymentAndAddressModal.onOpen}
+                  label="ยืนยันการชำระเงิน และปลายทางจัดส่ง/Verrifypayment and address"
                 />
                 <hr />
                 <MenuItem

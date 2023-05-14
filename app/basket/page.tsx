@@ -7,7 +7,7 @@ import getReservations from "@/app/actions/getReservations";
 
 import BasketClient from "./BasketClient";
 
-const BasketPage: FC = async () => {
+const BasketPage = async () => {
   const currentUser = await getCurrentUser();
 
   if (!currentUser) {

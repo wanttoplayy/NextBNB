@@ -3,18 +3,19 @@
 import { SafeListing, SafeReservation, SafeUser } from "@/app/types";
 import { Listing, Reservation } from "@prisma/client";
 import { useRouter } from "next/navigation";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import Image from "next/image";
 import HeartButton from "../HeartButton";
 import { User } from "next-auth";
+import Button from "../Button";
 
 interface ListingCardProps {
   data: SafeListing;
   reservation?: SafeReservation;
   onAction?: (id: string) => void;
-  disable?: boolean;
+  disabled?: boolean;
   actionLabel?: string;
-  actionID?: string;
+  actionId?: string;
   currentUser?: SafeUser | null;
 }
 
@@ -22,12 +23,25 @@ const ListingCard: React.FC<ListingCardProps> = ({
   data,
   reservation,
   onAction,
-  disable,
+  disabled,
   actionLabel,
-  actionID,
+  actionId,
   currentUser,
 }) => {
   const router = useRouter();
+
+  const handleCancel = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.stopPropagation();
+
+      if (disabled) {
+        return;
+      }
+
+      onAction?.(actionId);
+    },
+    [disabled, onAction, actionId]
+  );
 
   const price = useMemo(() => {
     if (reservation) {
@@ -84,6 +98,14 @@ const ListingCard: React.FC<ListingCardProps> = ({
         <div className="font-light text-neutral-500">{itemCategory}</div>
         <div className="font-semibold">฿ {price}</div>
       </div>
+      {onAction && actionLabel && (
+        <Button
+          disabled={disabled}
+          small
+          label={actionLabel}
+          onClick={handleCancel}
+        />
+      )}
     </div>
   );
 };
