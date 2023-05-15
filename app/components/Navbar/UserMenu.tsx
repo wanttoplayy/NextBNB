@@ -6,11 +6,11 @@ import { useCallback, useState } from "react";
 import MenuItem from "./MenuItem";
 import useRegisterModal from "@/app/hooks/useRegisterModal";
 import useLoginModal from "@/app/hooks/useLoginModal";
+import useVerifyPaymentAndAddressModal from "@/app/hooks/useVerifyPaymentAndAddress";
 import useAddItemModal from "@/app/hooks/useAddItemModal";
 import { signOut } from "next-auth/react";
 import { SafeUser } from "@/app/types";
 import { useRouter } from "next/navigation";
-import useVerifyPaymentAndAddressModal from "@/app/hooks/useVerifyPaymentAndAddress";
 
 interface UserMunuProps {
   currentUser?: SafeUser | null;
@@ -21,7 +21,7 @@ const UserMenu: React.FC<UserMunuProps> = ({ currentUser }) => {
   const registerModal = useRegisterModal();
   const loginModal = useLoginModal();
   const addItemModal = useAddItemModal();
-  const verrifyPaymentAndAddressModal = useVerifyPaymentAndAddressModal();
+  const verifyPaymentAndAddressModal = useVerifyPaymentAndAddressModal();
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleOpen = useCallback(() => {
@@ -35,12 +35,13 @@ const UserMenu: React.FC<UserMunuProps> = ({ currentUser }) => {
     addItemModal.onOpen();
   }, [currentUser, loginModal, addItemModal]);
 
-  const onVerrifyPaymentAndAddress = useCallback(() => {
-    if (!currentUser) {
-      return loginModal.onOpen();
-    }
-    verrifyPaymentAndAddressModal.onOpen();
-  }, [currentUser, loginModal, verrifyPaymentAndAddressModal]);
+  // const onVerifyPaymentAndAddress = useCallback(() => {
+  //   if (!currentUser) {
+  //     return loginModal.onOpen();
+  //   }
+  //   verifyPaymentAndAddressModal.onOpen();
+  // }, [currentUser, loginModal, verifyPaymentAndAddressModal]);
+  // console.log(onVerifyPaymentAndAddress);
 
   return (
     <div className="relative">
@@ -121,7 +122,7 @@ const UserMenu: React.FC<UserMunuProps> = ({ currentUser }) => {
                   label="สถานะการจัดส่ง/Parcel status"
                 />
                 <MenuItem
-                  onClick={verrifyPaymentAndAddressModal.onOpen}
+                  onClick={verifyPaymentAndAddressModal.onOpen}
                   label="ยืนยันการชำระเงิน และปลายทางจัดส่ง/Verrifypayment and address"
                 />
                 <hr />

@@ -15,18 +15,18 @@ import Input from "../Inputs/Input";
 import DescriptionInput from "../Inputs/DescriptionInput";
 
 enum STEPS {
-  PAYMENT = 0,
-  VERIFY = 1,
-  ADDRESS = 2,
-  ITEMS = 3,
+  CATEGORY = 0,
+  IMAGE = 1,
+  PRICE = 2,
+  DESCRIPTION = 3,
 }
 
-const verifyPaymentAndAddressModal = () => {
+const VerifyPaymentAndAddressModal = () => {
   const router = useRouter();
   const verifyPaymentAndAddressModal = useVerifyPaymentAndAddressModal();
 
   const [isloading, setIsLoading] = useState(false);
-  const [step, setStep] = useState(STEPS.PAYMENT);
+  const [step, setStep] = useState(STEPS.CATEGORY);
 
   const {
     register,
@@ -37,12 +37,15 @@ const verifyPaymentAndAddressModal = () => {
     reset,
   } = useForm<FieldValues>({
     defaultValues: {
+      category: "",
       imageSrc: "",
-      address: "",
+      price: 1,
+      title: "",
+      description: "",
     },
   });
 
-  const verify = watch("verify");
+  const category = watch("category");
   const imageSrc = watch("imageSrc");
 
   const setCustomValue = (id: string, value: any) => {
@@ -62,7 +65,7 @@ const verifyPaymentAndAddressModal = () => {
   };
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    if (step !== STEPS.VERIFY) {
+    if (step !== STEPS.DESCRIPTION) {
       return onNext();
     }
 
@@ -71,10 +74,10 @@ const verifyPaymentAndAddressModal = () => {
     axios
       .post("/api/listings", data)
       .then(() => {
-        toast.success("ยืนยันการชำระเงินสมบูรณ์");
+        toast.success("รายการสินค้าถูกสร้างแล้ว");
         router.refresh();
         reset();
-        setStep(STEPS.PAYMENT);
+        setStep(STEPS.CATEGORY);
         verifyPaymentAndAddressModal.onClose();
       })
       .catch(() => {
@@ -86,7 +89,7 @@ const verifyPaymentAndAddressModal = () => {
   };
 
   const actionLabel = useMemo(() => {
-    if (step === STEPS.VERIFY) {
+    if (step === STEPS.DESCRIPTION) {
       return "Create";
     }
 
@@ -94,7 +97,7 @@ const verifyPaymentAndAddressModal = () => {
   }, [step]);
 
   const secondaryActionLabel = useMemo(() => {
-    if (step === STEPS.PAYMENT) {
+    if (step === STEPS.CATEGORY) {
       return undefined;
     }
     return "Back";
@@ -103,7 +106,7 @@ const verifyPaymentAndAddressModal = () => {
   let bodyContent = (
     <div className="flex flex-col gap-8">
       <Heading
-        title="โปรดแนบหลักฐานการชำระเงิน"
+        title="โปรดเลือกประเภทสินค้าตามหมวดหมู่"
         subtitle="เลือกหมวดหมู่สินค้า"
       />
       <div
@@ -129,10 +132,10 @@ const verifyPaymentAndAddressModal = () => {
     </div>
   );
 
-  if (step === STEPS.VERIFY) {
+  if (step === STEPS.IMAGE) {
     bodyContent = (
       <div className="flex flex-col gap-8">
-        <Heading title="โปรดเพิ่มรูปภาพหลักฐานการชำระเงิน" />
+        <Heading title="โปรดเพิ่มรูปภาพของสินค้า" />
         <ImageSelect
           value={imageSrc}
           onChange={(value) => setCustomValue("imageSrc", value)}
@@ -141,15 +144,25 @@ const verifyPaymentAndAddressModal = () => {
     );
   }
 
-  if (step === STEPS.ADDRESS) {
+  if (step === STEPS.PRICE) {
     bodyContent = (
       <div className="flex flex-col gap-8">
-        <Heading title="โปรดเพิ่มที่อยู่ปลายทางในการจัดส่ง" />
+        <Heading title="โปรดเพิ่มราคาสินค้า" />
         <Input
-          id="address"
-          label="ที่อยู่ปลายทางในการจัดส่ง"
+          id="price"
+          label="ราคาสินค้า"
           formatPrice
-          type="text"
+          type="number"
+          disabled={isloading}
+          register={register}
+          errors={errors}
+          required
+        />
+        <hr />
+        <Input
+          id="quatity"
+          label="จำนวนสินค้า"
+          type="number"
           disabled={isloading}
           register={register}
           errors={errors}
@@ -159,7 +172,7 @@ const verifyPaymentAndAddressModal = () => {
     );
   }
 
-  if (step === STEPS.ITEMS) {
+  if (step === STEPS.DESCRIPTION) {
     bodyContent = (
       <div className="flex flex-col gap-8">
         <Heading title="โปรดเพิ่มรายละเอียดสินค้า" />
@@ -191,10 +204,10 @@ const verifyPaymentAndAddressModal = () => {
       onSubmit={handleSubmit(onSubmit)}
       actionLabel={actionLabel}
       secondaryActionLabel={secondaryActionLabel}
-      secondaryAction={step === STEPS.PAYMENT ? undefined : onBack}
+      secondaryAction={step === STEPS.CATEGORY ? undefined : onBack}
       title="การจัดการสินค้า"
       body={bodyContent}
     />
   );
 };
-export default verifyPaymentAndAddressModal;
+export default VerifyPaymentAndAddressModal;
