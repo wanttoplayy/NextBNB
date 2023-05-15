@@ -7,6 +7,7 @@ import ToasterProvider from "./provider/ToasterProvider";
 import LoginModal from "./components/modals/LoginModal";
 import getCurrentUser from "./actions/getCurrentUser";
 import AddItemModal from "./components/modals/AddItemModal";
+import VerifyPaymentAndAddressModal from "./components/modals/VerifyPaymentAndAddressModal";
 
 export const metadata = {
   title: "Modumart",
@@ -32,6 +33,7 @@ export default async function RootLayout({
           <LoginModal />
           <AddItemModal />
           <RegisterModal />
+          <VerifyPaymentAndAddressModal />
           <Navbar currentUser={currentUser} />
         </ClientOnly>
         <div className="pb-20 pt-28">{children}</div>

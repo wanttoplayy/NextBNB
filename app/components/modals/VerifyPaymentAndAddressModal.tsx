@@ -1,32 +1,63 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import Modal from "./Modal";
 import useVerifyPaymentAndAddressModal from "@/app/hooks/useVerifyPaymentAndAddress";
 import Heading from "../Heading";
-import { categories } from "../Navbar/Categories";
-import CategoryInput from "../Inputs/CategoryInput";
 import { SubmitHandler, FieldValues, useForm } from "react-hook-form";
 import ImageSelect from "../Inputs/ImageSelect";
 import axios from "axios";
+import { NextRouter } from "next/router";
 import { useRouter } from "next/navigation";
+
 import { toast } from "react-hot-toast";
 import Input from "../Inputs/Input";
-import DescriptionInput from "../Inputs/DescriptionInput";
+import ListingCard from "../listings/ListingCard";
+import { SafeReservation, SafeUser } from "@/app/types";
+import Image from "next/image";
 
 enum STEPS {
-  CATEGORY = 0,
-  IMAGE = 1,
-  PRICE = 2,
-  DESCRIPTION = 3,
+  VERIFY = 0,
+  PAYMENT = 1,
+  IMAGE = 2,
+  ADDRESS = 3,
 }
 
-const VerifyPaymentAndAddressModal = () => {
+interface VerifyPaymentAndAddressModalProps {
+  reservations: SafeReservation[];
+  currentUser?: SafeUser | null;
+  router: NextRouter;
+}
+
+const VerifyPaymentAndAddressModal: React.FC<
+  VerifyPaymentAndAddressModalProps
+> = ({ reservations, currentUser }) => {
   const router = useRouter();
   const verifyPaymentAndAddressModal = useVerifyPaymentAndAddressModal();
 
   const [isloading, setIsLoading] = useState(false);
-  const [step, setStep] = useState(STEPS.CATEGORY);
+  const [step, setStep] = useState(STEPS.VERIFY);
+  const [deletingId, setDeletingId] = useState("");
+
+  const onCancel = useCallback(
+    (id: string) => {
+      setDeletingId(id);
+
+      axios
+        .delete(`/api/reservations/${id}`)
+        .then(() => {
+          toast.success("Reservation cancelled");
+          router.refresh();
+        })
+        .catch((error) => {
+          toast.error(error?.response?.data?.error);
+        })
+        .finally(() => {
+          setDeletingId("");
+        });
+    },
+    [router]
+  );
 
   const {
     register,
@@ -37,15 +68,13 @@ const VerifyPaymentAndAddressModal = () => {
     reset,
   } = useForm<FieldValues>({
     defaultValues: {
-      category: "",
-      imageSrc: "",
-      price: 1,
-      title: "",
-      description: "",
+      VERIFY: "",
+      PAYMENT: "",
+      IMAGE: "",
+      ADDRESS: "",
     },
   });
 
-  const category = watch("category");
   const imageSrc = watch("imageSrc");
 
   const setCustomValue = (id: string, value: any) => {
@@ -65,7 +94,7 @@ const VerifyPaymentAndAddressModal = () => {
   };
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    if (step !== STEPS.DESCRIPTION) {
+    if (step !== STEPS.ADDRESS) {
       return onNext();
     }
 
@@ -77,7 +106,7 @@ const VerifyPaymentAndAddressModal = () => {
         toast.success("รายการสินค้าถูกสร้างแล้ว");
         router.refresh();
         reset();
-        setStep(STEPS.CATEGORY);
+        setStep(STEPS.VERIFY);
         verifyPaymentAndAddressModal.onClose();
       })
       .catch(() => {
@@ -89,7 +118,7 @@ const VerifyPaymentAndAddressModal = () => {
   };
 
   const actionLabel = useMemo(() => {
-    if (step === STEPS.DESCRIPTION) {
+    if (step === STEPS.ADDRESS) {
       return "Create";
     }
 
@@ -97,7 +126,7 @@ const VerifyPaymentAndAddressModal = () => {
   }, [step]);
 
   const secondaryActionLabel = useMemo(() => {
-    if (step === STEPS.CATEGORY) {
+    if (step === STEPS.VERIFY) {
       return undefined;
     }
     return "Back";
@@ -105,37 +134,49 @@ const VerifyPaymentAndAddressModal = () => {
 
   let bodyContent = (
     <div className="flex flex-col gap-8">
-      <Heading
-        title="โปรดเลือกประเภทสินค้าตามหมวดหมู่"
-        subtitle="เลือกหมวดหมู่สินค้า"
-      />
-      <div
-        className="
-      grid
-      grid-cols-1
-      md:grid=cols-2
-      gap-3
-      max-h-[50yh]
-      overflow-y-auto"
-      >
-        {categories.map((item) => (
-          <div key={item.label} className="col-span-1">
-            <CategoryInput
-              onClick={(category) => setCustomValue("category", category)}
-              selected={category === item.label}
-              label={item.label}
-              icon={item.icon}
-            />
-          </div>
-        ))}
-      </div>
+      <Heading title="โปรดตรวจสอบรายการสินค้าที่เลือก" />
+      {/* {reservations.map((reservation: any) => (
+        <ListingCard
+          key={reservation.id}
+          data={reservation.listing}
+          reservation={reservation}
+          actionId={reservation.id}
+          onAction={onCancel}
+          disabled={deletingId === reservation.id}
+          actionLabel="ยกเลิกสินค้า"
+          currentUser={currentUser}
+        />
+      ))} */}
     </div>
   );
+
+  if (step === STEPS.PAYMENT) {
+    bodyContent = (
+      <div className="flex flex-col gap-8 h-[700px] w-[300px]">
+        <Heading
+          title="ช่องทางการชำระเงินสำหรับลูกค้า"
+          subtitle="2ช่องทางการชำระเงิน"
+        />
+        <Image
+          fill
+          src={"/images/Banking.png"}
+          alt={"Banking"}
+          className="
+        object-cover
+        h-full
+        w-full
+        group-hover:scale-110
+        transition
+        "
+        />
+      </div>
+    );
+  }
 
   if (step === STEPS.IMAGE) {
     bodyContent = (
       <div className="flex flex-col gap-8">
-        <Heading title="โปรดเพิ่มรูปภาพของสินค้า" />
+        <Heading title="โปรดเพิ่มรูปภาพหลักฐานการชำระเงิน" />
         <ImageSelect
           value={imageSrc}
           onChange={(value) => setCustomValue("imageSrc", value)}
@@ -144,54 +185,17 @@ const VerifyPaymentAndAddressModal = () => {
     );
   }
 
-  if (step === STEPS.PRICE) {
+  if (step === STEPS.ADDRESS) {
     bodyContent = (
       <div className="flex flex-col gap-8">
-        <Heading title="โปรดเพิ่มราคาสินค้า" />
+        <Heading title="โปรดเพิ่มที่อยู่สำหรับจัดส่งสินค้า และเบอร์ติดต่อ" />
         <Input
-          id="price"
-          label="ราคาสินค้า"
-          formatPrice
-          type="number"
+          id="ที่อยู่ลูกค้า"
+          label="ที่อยู่สำหรับจัดส่งสินค้า"
+          type="text"
           disabled={isloading}
           register={register}
           errors={errors}
-          required
-        />
-        <hr />
-        <Input
-          id="quatity"
-          label="จำนวนสินค้า"
-          type="number"
-          disabled={isloading}
-          register={register}
-          errors={errors}
-          required
-        />
-      </div>
-    );
-  }
-
-  if (step === STEPS.DESCRIPTION) {
-    bodyContent = (
-      <div className="flex flex-col gap-8">
-        <Heading title="โปรดเพิ่มรายละเอียดสินค้า" />
-        <Input
-          id="title"
-          label="ชื่อสินค้า"
-          disabled={isloading}
-          register={register}
-          errors={errors}
-          required
-        />
-        <hr />
-        <DescriptionInput
-          id="description"
-          label="รายละเอียดสินค้า"
-          disabled={isloading}
-          register={register}
-          errors={errors}
-          required
         />
       </div>
     );
@@ -204,7 +208,7 @@ const VerifyPaymentAndAddressModal = () => {
       onSubmit={handleSubmit(onSubmit)}
       actionLabel={actionLabel}
       secondaryActionLabel={secondaryActionLabel}
-      secondaryAction={step === STEPS.CATEGORY ? undefined : onBack}
+      secondaryAction={step === STEPS.VERIFY ? undefined : onBack}
       title="การจัดการสินค้า"
       body={bodyContent}
     />

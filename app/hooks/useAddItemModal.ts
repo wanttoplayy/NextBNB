@@ -1,12 +1,12 @@
 import { create } from "zustand";
 
-interface AddItemModalStore {
+interface AddItemModal {
   isOpen: boolean;
   onOpen: () => void;
   onClose: () => void;
 }
 
-const useAddItemModal = create<AddItemModalStore>((set) => ({
+const useAddItemModal = create<AddItemModal>((set) => ({
   isOpen: false,
   onOpen: () => set({ isOpen: true }),
   onClose: () => set({ isOpen: false }),
