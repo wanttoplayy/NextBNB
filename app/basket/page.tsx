@@ -1,3 +1,5 @@
+"use client";
+
 import EmptyState from "@/app/components/EmptyState";
 import ClientOnly from "@/app/components/clientOnly";
 
@@ -6,8 +8,10 @@ import getReservations from "@/app/actions/getReservations";
 
 import BasketClient from "./BasketClient";
 import Button from "../components/Button";
+import useVerifyPaymentAndAddressModal from "../hooks/useVerifyPaymentAndAddress";
 
 const BasketPage = async () => {
+  const verifyPaymentAndAddressModal = useVerifyPaymentAndAddressModal();
   const currentUser = await getCurrentUser();
 
   if (!currentUser) {
@@ -34,7 +38,7 @@ const BasketPage = async () => {
   return (
     <ClientOnly>
       <BasketClient reservations={reservations} currentUser={currentUser} />
-      {/* <button label="ชำระเงิน" /> */}
+      <Button label="ชำระเงิน" onClick={verifyPaymentAndAddressModal.onOpen} />
     </ClientOnly>
   );
 };
