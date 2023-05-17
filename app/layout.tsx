@@ -1,7 +1,7 @@
 import { Nunito } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/Navbar/Navbar";
-import ClientOnly from "./components/ClientOnly";
+import ClientOnly from "@/app/components/clientOnly";
 import RegisterModal from "./components/modals/RegisterModal";
 import ToasterProvider from "./provider/ToasterProvider";
 import LoginModal from "./components/modals/LoginModal";
@@ -33,7 +33,7 @@ export default async function RootLayout({
           <LoginModal />
           <AddItemModal />
           <RegisterModal />
-          <VerifyPaymentAndAddressModal />
+          <VerifyPaymentAndAddressModal reservations={[]} />
           <Navbar currentUser={currentUser} />
         </ClientOnly>
         <div className="pb-20 pt-28">{children}</div>

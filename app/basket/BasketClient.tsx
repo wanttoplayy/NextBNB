@@ -33,8 +33,8 @@ const BasketClient: React.FC<BasketClientProps> = ({
           toast.success("Reservation cancelled");
           router.refresh();
         })
-        .catch((error) => {
-          toast.error(error?.response?.data?.error);
+        .catch(() => {
+          toast.error("Something went wrong.");
         })
         .finally(() => {
           setDeletingId("");
@@ -67,8 +67,8 @@ const BasketClient: React.FC<BasketClientProps> = ({
             key={reservation.id}
             data={reservation.listing}
             reservation={reservation}
-            actionId={reservation.id}
             onAction={onCancel}
+            actionId={reservation.id}
             disabled={deletingId === reservation.id}
             actionLabel="ยกเลิกสินค้า"
             currentUser={currentUser}

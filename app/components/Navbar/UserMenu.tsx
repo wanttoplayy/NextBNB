@@ -28,26 +28,25 @@ const UserMenu: React.FC<UserMunuProps> = ({ currentUser }) => {
     setIsOpen((value) => !value);
   }, []);
 
-  const onAddItem = useCallback(() => {
-    if (!currentUser) {
-      return loginModal.onOpen();
-    }
-    addItemModal.onOpen();
-  }, [currentUser, loginModal, addItemModal]);
-
-  // const onVerifyPaymentAndAddress = useCallback(() => {
+  // const onAddItem = useCallback(() => {
   //   if (!currentUser) {
   //     return loginModal.onOpen();
   //   }
-  //   verifyPaymentAndAddressModal.onOpen();
-  // }, [currentUser, loginModal, verifyPaymentAndAddressModal]);
-  // console.log(onVerifyPaymentAndAddress);
+  //   addItemModal.onOpen();
+  // }, [currentUser, loginModal, addItemModal]);
+
+  const onBasket = useCallback(() => {
+    if (!currentUser) {
+      return loginModal.onOpen();
+    }
+    router.push("/basket");
+  }, [currentUser, loginModal]);
 
   return (
     <div className="relative">
       <div className="flex flex-row items-center gap-3">
         <div
-          onClick={onAddItem}
+          onClick={onBasket}
           className="
                 hidden
                 md:block
@@ -61,7 +60,7 @@ const UserMenu: React.FC<UserMunuProps> = ({ currentUser }) => {
                 cursor-pointer
                 "
         >
-          สมาชิก/Member
+          ตระกร้าสินค้าที่ถูกเลือก
         </div>
         <div
           onClick={toggleOpen}
@@ -116,7 +115,7 @@ const UserMenu: React.FC<UserMunuProps> = ({ currentUser }) => {
                   onClick={() => router.push("/basket")}
                   label="ตระกร้าสินค้า/Wishlist"
                 />
-                <MenuItem onClick={() => {}} label="การชำระเงิน/Payment" />
+
                 <MenuItem
                   onClick={() => {}}
                   label="สถานะการจัดส่ง/Parcel status"

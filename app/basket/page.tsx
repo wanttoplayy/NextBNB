@@ -1,11 +1,11 @@
-import { FC } from "react";
 import EmptyState from "@/app/components/EmptyState";
-import ClientOnly from "@/app/components/ClientOnly";
+import ClientOnly from "@/app/components/clientOnly";
 
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import getReservations from "@/app/actions/getReservations";
 
 import BasketClient from "./BasketClient";
+import Button from "../components/Button";
 
 const BasketPage = async () => {
   const currentUser = await getCurrentUser();
@@ -34,6 +34,7 @@ const BasketPage = async () => {
   return (
     <ClientOnly>
       <BasketClient reservations={reservations} currentUser={currentUser} />
+      {/* <button label="ชำระเงิน" /> */}
     </ClientOnly>
   );
 };

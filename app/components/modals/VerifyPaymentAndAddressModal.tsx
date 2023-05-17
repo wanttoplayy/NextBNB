@@ -1,32 +1,250 @@
+// "use client";
+
+// import { useCallback, useMemo, useState } from "react";
+// import Modal from "./Modal";
+// import useVerifyPaymentAndAddressModal from "@/app/hooks/useVerifyPaymentAndAddress";
+// import Heading from "../Heading";
+// import { SubmitHandler, FieldValues, useForm } from "react-hook-form";
+// import ImageSelect from "../Inputs/ImageSelect";
+// import axios from "axios";
+
+// import { useRouter } from "next/navigation";
+
+// import { toast } from "react-hot-toast";
+// import Input from "../Inputs/Input";
+
+// import { SafeReservation, SafeUser } from "@/app/types";
+// import Image from "next/image";
+// import ListingCard from "../listings/ListingCard";
+
+// enum STEPS {
+//   VERIFY = 0,
+//   PAYMENT = 1,
+//   IMAGE = 2,
+//   ADDRESS = 3,
+// }
+
+// interface VerifyPaymentAndAddressModalProps {
+//   reservations: SafeReservation[];
+//   currentUser?: SafeUser | null;
+// }
+
+// const VerifyPaymentAndAddressModal: React.FC<
+//   VerifyPaymentAndAddressModalProps
+// > = ({ reservations, currentUser }) => {
+//   const router = useRouter();
+//   const verifyPaymentAndAddressModal = useVerifyPaymentAndAddressModal();
+
+//   const [isloading, setIsLoading] = useState(false);
+//   const [step, setStep] = useState(STEPS.VERIFY);
+//   const [deletingId, setDeletingId] = useState("");
+
+//   const onCancel = useCallback(
+//     (id: string) => {
+//       setDeletingId(id);
+
+//       axios
+//         .delete(`/api/reservations/${id}`)
+//         .then(() => {
+//           toast.success("Reservation cancelled");
+//           router.refresh();
+//         })
+//         .catch((error) => {
+//           toast.error(error?.response?.data?.error);
+//         })
+//         .finally(() => {
+//           setDeletingId("");
+//         });
+//     },
+//     [router]
+//   );
+
+//   const {
+//     register,
+//     handleSubmit,
+//     setValue,
+//     watch,
+//     formState: { errors },
+//     reset,
+//   } = useForm<FieldValues>({
+//     defaultValues: {
+//       VERIFY: "",
+//       PAYMENT: "",
+//       IMAGE: "",
+//       ADDRESS: "",
+//     },
+//   });
+
+//   const imageSrc = watch("imageSrc");
+
+//   const setCustomValue = (id: string, value: any) => {
+//     setValue(id, value, {
+//       shouldValidate: true,
+//       shouldDirty: true,
+//       shouldTouch: true,
+//     });
+//   };
+
+//   const onBack = () => {
+//     setStep((value) => value - 1);
+//   };
+
+//   const onNext = () => {
+//     setStep((valut) => valut + 1);
+//   };
+
+//   const onSubmit: SubmitHandler<FieldValues> = (data) => {
+//     if (step !== STEPS.ADDRESS) {
+//       return onNext();
+//     }
+
+//     setIsLoading(true);
+
+//     axios
+//       .post("/api/listings", data)
+//       .then(() => {
+//         toast.success("รายการสินค้าถูกสร้างแล้ว");
+//         router.refresh();
+//         reset();
+//         setStep(STEPS.VERIFY);
+//         verifyPaymentAndAddressModal.onClose();
+//       })
+//       .catch(() => {
+//         toast.error("บางอย่างผิดพลาด");
+//       })
+//       .finally(() => {
+//         setIsLoading(false);
+//       });
+//   };
+
+//   const actionLabel = useMemo(() => {
+//     if (step === STEPS.ADDRESS) {
+//       return "Create";
+//     }
+
+//     return "Next";
+//   }, [step]);
+
+//   const secondaryActionLabel = useMemo(() => {
+//     if (step === STEPS.VERIFY) {
+//       return undefined;
+//     }
+//     return "Back";
+//   }, [step]);
+
+//   let bodyContent = (
+//     <div className="flex flex-col gap-8">
+//       <Heading title="โปรดตรวจสอบรายการสินค้าที่เลือก" />
+//       {reservations.map((reservation: any) => (
+//         <ListingCard
+//           key={reservation.id}
+//           data={reservation.listing}
+//           reservation={reservation}
+//           actionId={reservation.id}
+//           onAction={onCancel}
+//           disabled={deletingId === reservation.id}
+//           actionLabel="ยกเลิกสินค้า"
+//           currentUser={currentUser}
+//         />
+//       ))}
+//     </div>
+//   );
+
+//   if (step === STEPS.PAYMENT) {
+//     bodyContent = (
+//       <div className="flex flex-col gap-8 h-[700px] w-[300px]">
+//         <Heading
+//           title="ช่องทางการชำระเงินสำหรับลูกค้า"
+//           subtitle="2ช่องทางการชำระเงิน"
+//         />
+//         <Image
+//           fill
+//           src={"/images/Banking.png"}
+//           alt={"Banking"}
+//           className="
+//         object-cover
+//         h-full
+//         w-full
+//         group-hover:scale-110
+//         transition
+//         "
+//         />
+//       </div>
+//     );
+//   }
+
+//   if (step === STEPS.IMAGE) {
+//     bodyContent = (
+//       <div className="flex flex-col gap-8">
+//         <Heading title="โปรดเพิ่มรูปภาพหลักฐานการชำระเงิน" />
+//         <ImageSelect
+//           value={imageSrc}
+//           onChange={(value) => setCustomValue("imageSrc", value)}
+//         />
+//       </div>
+//     );
+//   }
+
+//   if (step === STEPS.ADDRESS) {
+//     bodyContent = (
+//       <div className="flex flex-col gap-8">
+//         <Heading
+//           title="โปรดเพิ่มที่อยู่สำหรับจัดส่งสินค้า และเบอร์ติดต่อ"
+//           subtitle="ตัวอย่าง: 888/888 ม.8 ต.บางรักพัฒนา อ.บางบัวทอง จ.นนทบุรี 11110"
+//         />
+//         <Input
+//           id="ที่อยู่ลูกค้า"
+//           label="ที่อยู่สำหรับจัดส่งสินค้า"
+//           type="text"
+//           disabled={isloading}
+//           register={register}
+//           errors={errors}
+//         />
+//       </div>
+//     );
+//   }
+
+//   return (
+//     <Modal
+//       isOpen={verifyPaymentAndAddressModal.isOpen}
+//       onClose={verifyPaymentAndAddressModal.onClose}
+//       onSubmit={handleSubmit(onSubmit)}
+//       actionLabel={actionLabel}
+//       secondaryActionLabel={secondaryActionLabel}
+//       secondaryAction={step === STEPS.VERIFY ? undefined : onBack}
+//       title="การจัดการสินค้า"
+//       body={bodyContent}
+//     />
+//   );
+// };
+// export default VerifyPaymentAndAddressModal;
 "use client";
+
+import React from "react";
 
 import { useCallback, useMemo, useState } from "react";
 import Modal from "./Modal";
 import useVerifyPaymentAndAddressModal from "@/app/hooks/useVerifyPaymentAndAddress";
 import Heading from "../Heading";
-import { SubmitHandler, FieldValues, useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import ImageSelect from "../Inputs/ImageSelect";
 import axios from "axios";
-import { NextRouter } from "next/router";
 import { useRouter } from "next/navigation";
-
 import { toast } from "react-hot-toast";
 import Input from "../Inputs/Input";
-import ListingCard from "../listings/ListingCard";
 import { SafeReservation, SafeUser } from "@/app/types";
 import Image from "next/image";
+import ListingCard from "../listings/ListingCard";
 
 enum STEPS {
-  VERIFY = 0,
-  PAYMENT = 1,
-  IMAGE = 2,
-  ADDRESS = 3,
+  PAYMENT = 0,
+  IMAGE = 1,
+  ADDRESS = 2,
 }
 
 interface VerifyPaymentAndAddressModalProps {
   reservations: SafeReservation[];
   currentUser?: SafeUser | null;
-  router: NextRouter;
 }
 
 const VerifyPaymentAndAddressModal: React.FC<
@@ -35,8 +253,8 @@ const VerifyPaymentAndAddressModal: React.FC<
   const router = useRouter();
   const verifyPaymentAndAddressModal = useVerifyPaymentAndAddressModal();
 
-  const [isloading, setIsLoading] = useState(false);
-  const [step, setStep] = useState(STEPS.VERIFY);
+  const [isLoading, setIsLoading] = useState(false);
+  const [step, setStep] = useState(STEPS.PAYMENT);
   const [deletingId, setDeletingId] = useState("");
 
   const onCancel = useCallback(
@@ -66,9 +284,8 @@ const VerifyPaymentAndAddressModal: React.FC<
     watch,
     formState: { errors },
     reset,
-  } = useForm<FieldValues>({
+  } = useForm({
     defaultValues: {
-      VERIFY: "",
       PAYMENT: "",
       IMAGE: "",
       ADDRESS: "",
@@ -90,10 +307,10 @@ const VerifyPaymentAndAddressModal: React.FC<
   };
 
   const onNext = () => {
-    setStep((valut) => valut + 1);
+    setStep((value) => value + 1);
   };
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
+  const onSubmit: SubmitHandler<any> = (data) => {
     if (step !== STEPS.ADDRESS) {
       return onNext();
     }
@@ -106,7 +323,7 @@ const VerifyPaymentAndAddressModal: React.FC<
         toast.success("รายการสินค้าถูกสร้างแล้ว");
         router.refresh();
         reset();
-        setStep(STEPS.VERIFY);
+        setStep(STEPS.PAYMENT);
         verifyPaymentAndAddressModal.onClose();
       })
       .catch(() => {
@@ -126,54 +343,31 @@ const VerifyPaymentAndAddressModal: React.FC<
   }, [step]);
 
   const secondaryActionLabel = useMemo(() => {
-    if (step === STEPS.VERIFY) {
+    if (step === STEPS.PAYMENT) {
       return undefined;
     }
     return "Back";
   }, [step]);
 
-  let bodyContent = (
-    <div className="flex flex-col gap-8">
-      <Heading title="โปรดตรวจสอบรายการสินค้าที่เลือก" />
-      {/* {reservations.map((reservation: any) => (
-        <ListingCard
-          key={reservation.id}
-          data={reservation.listing}
-          reservation={reservation}
-          actionId={reservation.id}
-          onAction={onCancel}
-          disabled={deletingId === reservation.id}
-          actionLabel="ยกเลิกสินค้า"
-          currentUser={currentUser}
-        />
-      ))} */}
-    </div>
-  );
+  let bodyContent;
 
   if (step === STEPS.PAYMENT) {
     bodyContent = (
-      <div className="flex flex-col gap-8 h-[700px] w-[300px]">
+      <div className="flex flex-col gap-8 h-auto w-auto">
         <Heading
           title="ช่องทางการชำระเงินสำหรับลูกค้า"
-          subtitle="2ช่องทางการชำระเงิน"
+          subtitle="2 ช่องทางการชำระเงิน"
         />
         <Image
-          fill
-          src={"/images/Banking.png"}
-          alt={"Banking"}
-          className="
-        object-cover
-        h-full
-        w-full
-        group-hover:scale-110
-        transition
-        "
+          src="/images/Banking.png"
+          alt="Banking"
+          className="object-cover h-full w-full group-hover:scale-110 transition"
+          width={300}
+          height={700}
         />
       </div>
     );
-  }
-
-  if (step === STEPS.IMAGE) {
+  } else if (step === STEPS.IMAGE) {
     bodyContent = (
       <div className="flex flex-col gap-8">
         <Heading title="โปรดเพิ่มรูปภาพหลักฐานการชำระเงิน" />
@@ -183,17 +377,18 @@ const VerifyPaymentAndAddressModal: React.FC<
         />
       </div>
     );
-  }
-
-  if (step === STEPS.ADDRESS) {
+  } else if (step === STEPS.ADDRESS) {
     bodyContent = (
       <div className="flex flex-col gap-8">
-        <Heading title="โปรดเพิ่มที่อยู่สำหรับจัดส่งสินค้า และเบอร์ติดต่อ" />
+        <Heading
+          title="โปรดเพิ่มที่อยู่สำหรับจัดส่งสินค้าและเบอร์ติดต่อ"
+          subtitle="ตัวอย่าง: 888/888 ม.8 ต.บางรักพัฒนา อ.บางบัวทอง จ.นนทบุรี 11110 โทร0888888888"
+        />
         <Input
-          id="ที่อยู่ลูกค้า"
+          id="address"
           label="ที่อยู่สำหรับจัดส่งสินค้า"
           type="text"
-          disabled={isloading}
+          disabled={isLoading}
           register={register}
           errors={errors}
         />
@@ -208,10 +403,11 @@ const VerifyPaymentAndAddressModal: React.FC<
       onSubmit={handleSubmit(onSubmit)}
       actionLabel={actionLabel}
       secondaryActionLabel={secondaryActionLabel}
-      secondaryAction={step === STEPS.VERIFY ? undefined : onBack}
+      secondaryAction={step === STEPS.PAYMENT ? undefined : onBack}
       title="การจัดการสินค้า"
       body={bodyContent}
     />
   );
 };
+
 export default VerifyPaymentAndAddressModal;

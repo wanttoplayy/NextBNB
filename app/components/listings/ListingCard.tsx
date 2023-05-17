@@ -64,6 +64,12 @@ const ListingCard: React.FC<ListingCardProps> = ({
     return data.category;
   }, [reservation, data.category]);
 
+  const itemQuantity = useMemo(() => {
+    if (reservation) {
+      return reservation.quantity;
+    }
+  }, [reservation]);
+
   return (
     <div
       className="col-span-1 cursor-pointer group"
@@ -97,6 +103,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
         <div className="font-semibold text-xl">{itemTitle}</div>
         <div className="font-light text-neutral-500">{itemCategory}</div>
         <div className="font-semibold">฿ {price}</div>
+        <div className="font-semibold">สินค้าทั้งหมด {itemQuantity} ชิ้น</div>
       </div>
       {onAction && actionLabel && (
         <Button
