@@ -8,6 +8,7 @@ import LoginModal from "./components/modals/LoginModal";
 import getCurrentUser from "./actions/getCurrentUser";
 import AddItemModal from "./components/modals/AddItemModal";
 import VerifyPaymentAndAddressModal from "./components/modals/VerifyPaymentAndAddressModal";
+import SearchModal from "./components/modals/SearchModal";
 
 export const metadata = {
   title: "Modumart",
@@ -31,6 +32,7 @@ export default async function RootLayout({
         <ClientOnly>
           <ToasterProvider />
           <LoginModal />
+          <SearchModal />
           <AddItemModal />
           <RegisterModal />
           <VerifyPaymentAndAddressModal reservations={[]} />
