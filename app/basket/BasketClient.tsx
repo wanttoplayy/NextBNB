@@ -10,6 +10,8 @@ import { SafeReservation, SafeUser } from "@/app/types";
 import Heading from "@/app/components/Heading";
 import Container from "@/app/components/Container";
 import ListingCard from "@/app/components/listings/ListingCard";
+import Button from "../components/Button";
+import useVerifyPaymentAndAddressModal from "../hooks/useVerifyPaymentAndAddress";
 
 interface BasketClientProps {
   reservations: SafeReservation[];
@@ -22,6 +24,7 @@ const BasketClient: React.FC<BasketClientProps> = ({
 }) => {
   const router = useRouter();
   const [deletingId, setDeletingId] = useState("");
+  const verifyPaymentAndAddressModal = useVerifyPaymentAndAddressModal();
 
   const onCancel = useCallback(
     (id: string) => {
@@ -75,6 +78,7 @@ const BasketClient: React.FC<BasketClientProps> = ({
           />
         ))}
       </div>
+      <Button label="ชำระเงิน" onClick={verifyPaymentAndAddressModal.onOpen} />
     </Container>
   );
 };
