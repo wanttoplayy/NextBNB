@@ -8,7 +8,6 @@ import useSearchModal from "@/app/hooks/useSearchModal";
 
 const Search = () => {
   const searchModal = useSearchModal();
-  const params = useSearchParams();
 
   return (
     <div
