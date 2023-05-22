@@ -52,8 +52,9 @@ const BasketClient: React.FC<BasketClientProps> = ({
         title="สินค้าในตระกร้านี้"
         subtitle="สินค้าที่ลูกค้าเลือกซื้อทั้งหมด"
       />
-      <div
-        className="
+      <div className="flex flex-col justify-center align items-center">
+        <div
+          className="
           mt-[50px]
           grid 
           grid-cols-1 
@@ -64,21 +65,27 @@ const BasketClient: React.FC<BasketClientProps> = ({
           2xl:grid-cols-6
           gap-8
         "
-      >
-        {reservations.map((reservation: any) => (
-          <ListingCard
-            key={reservation.id}
-            data={reservation.listing}
-            reservation={reservation}
-            onAction={onCancel}
-            actionId={reservation.id}
-            disabled={deletingId === reservation.id}
-            actionLabel="ยกเลิกสินค้า"
-            currentUser={currentUser}
+        >
+          {reservations.map((reservation: any) => (
+            <ListingCard
+              key={reservation.id}
+              data={reservation.listing}
+              reservation={reservation}
+              onAction={onCancel}
+              actionId={reservation.id}
+              disabled={deletingId === reservation.id}
+              actionLabel="ยกเลิกสินค้า"
+              currentUser={currentUser}
+            />
+          ))}
+        </div>
+        <div className="flex flex-col h-[200px] w-[300px] mt-[100px]">
+          <Button
+            label="ชำระเงิน"
+            onClick={verifyPaymentAndAddressModal.onOpen}
           />
-        ))}
+        </div>
       </div>
-      <Button label="ชำระเงิน" onClick={verifyPaymentAndAddressModal.onOpen} />
     </Container>
   );
 };
