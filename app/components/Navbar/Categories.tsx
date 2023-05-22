@@ -7,7 +7,8 @@ import { RxCookie } from "react-icons/rx";
 import { TbToolsKitchen2 } from "react-icons/tb";
 import { ImGift } from "react-icons/im";
 import CategoryBox from "../CategoryBox";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
+// import { useRouter } from "next/router";
 
 export const categories = [
   {
@@ -43,6 +44,7 @@ export const categories = [
 ];
 
 const Categories = () => {
+  const router = useRouter();
   const params = useSearchParams();
   const category = params?.get("category");
   const pathname = usePathname();
@@ -52,6 +54,9 @@ const Categories = () => {
   if (!isMainPage) {
     return null;
   }
+  const redirectToHome = () => {
+    router.push("/");
+  };
 
   return (
     <Container>
@@ -65,6 +70,7 @@ const Categories = () => {
             overflow-x-auto
             "
       >
+        <button onClick={redirectToHome}>Go to Home</button>
         {categories.map((item) => (
           <CategoryBox
             key={item.label}

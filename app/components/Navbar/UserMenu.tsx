@@ -12,11 +12,11 @@ import { signOut } from "next-auth/react";
 import { SafeUser } from "@/app/types";
 import { useRouter } from "next/navigation";
 
-interface UserMunuProps {
+interface UserMenuProps {
   currentUser?: SafeUser | null;
 }
 
-const UserMenu: React.FC<UserMunuProps> = ({ currentUser }) => {
+const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
   const router = useRouter();
   const registerModal = useRegisterModal();
   const loginModal = useLoginModal();
