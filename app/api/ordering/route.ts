@@ -11,7 +11,7 @@ export async function POST(request: Request) {
   }
 
   const body = await request.json();
-  const { payment, imageSrc, address } = body;
+  const { imageSrc, address } = body;
 
   Object.keys(body).forEach((value: any) => {
     if (!body[value]) {
@@ -21,7 +21,6 @@ export async function POST(request: Request) {
 
   const ordering = await prisma.ordering.create({
     data: {
-      payment,
       imageSrc,
       address,
       userId: currentUser.id,

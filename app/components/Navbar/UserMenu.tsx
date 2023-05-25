@@ -42,6 +42,13 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
     router.push("/basket");
   }, [currentUser, loginModal]);
 
+  const onMamagment = useCallback(() => {
+    if (!currentUser) {
+      return loginModal.onOpen();
+    }
+    router.push("/managment");
+  }, [loginModal]);
+
   return (
     <div className="relative">
       <div className="flex flex-row items-center gap-3">
