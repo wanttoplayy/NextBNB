@@ -111,7 +111,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
             {currentUser ? (
               <>
                 <MenuItem
-                  onClick={() => router.push("/managment")}
+                  onClick={() => {}}
                   label="การจัดการคำสั่งซื้อ/Order Managment"
                 />
                 <MenuItem
