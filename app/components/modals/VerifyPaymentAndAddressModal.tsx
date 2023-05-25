@@ -6,7 +6,7 @@ import { useCallback, useMemo, useState } from "react";
 import Modal from "./Modal";
 import useVerifyPaymentAndAddressModal from "@/app/hooks/useVerifyPaymentAndAddress";
 import Heading from "../Heading";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import ImageSelect from "../Inputs/ImageSelect";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -64,11 +64,11 @@ const VerifyPaymentAndAddressModal: React.FC<
     watch,
     formState: { errors },
     reset,
-  } = useForm({
+  } = useForm<FieldValues>({
     defaultValues: {
-      PAYMENT: "",
-      IMAGE: "",
-      ADDRESS: "",
+      payment: "",
+      image: "",
+      address: "",
     },
   });
 
@@ -90,7 +90,7 @@ const VerifyPaymentAndAddressModal: React.FC<
     setStep((value) => value + 1);
   };
 
-  const onSubmit: SubmitHandler<any> = (data) => {
+  const onSubmit: SubmitHandler<FieldValues> = (data) => {
     if (step !== STEPS.ADDRESS) {
       return onNext();
     }
@@ -98,9 +98,11 @@ const VerifyPaymentAndAddressModal: React.FC<
     setIsLoading(true);
 
     axios
-      .post("/api/listings", data)
+      .post("/api/ordering", data)
       .then(() => {
-        toast.success("รายการสินค้าถูกสร้างแล้ว");
+        toast.success(
+          "ได้รับข้อมูลการชำระแล้ว กรุณารอการตรวจสอบ และจัดส่งต่อไป"
+        );
         router.refresh();
         reset();
         setStep(STEPS.PAYMENT);

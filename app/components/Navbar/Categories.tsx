@@ -1,8 +1,8 @@
 "use client";
 
 import Container from "../Container";
-
-import { GiNoodles, GiSaucepan, GiBeerBottle } from "react-icons/gi";
+import { GiNoodles, GiSaucepan, GiBeerBottle, GiYinYang } from "react-icons/gi";
+import { FaHome } from "react-icons/fa";
 import { RxCookie } from "react-icons/rx";
 import { TbToolsKitchen2 } from "react-icons/tb";
 import { ImGift } from "react-icons/im";
@@ -54,23 +54,21 @@ const Categories = () => {
   if (!isMainPage) {
     return null;
   }
+
   const redirectToHome = () => {
     router.push("/");
   };
 
   return (
     <Container>
-      <div
-        className="
-            pt-4
-            flex
-            flex-row
-            items-center
-            justify-between
-            overflow-x-auto
-            "
-      >
-        <button onClick={redirectToHome}>Go to Home</button>
+      <div className="pt-4 flex flex-row items-center justify-between overflow-x-auto">
+        <button
+          onClick={redirectToHome}
+          className="home-button flex flex-col items-center text-neutral-500 font-medium text-sm px-4 py-2 rounded"
+        >
+          <GiYinYang className="mr-2 h-[27px] w-[27px]" />
+          <div className="mt-2">All product</div>
+        </button>
         {categories.map((item) => (
           <CategoryBox
             key={item.label}

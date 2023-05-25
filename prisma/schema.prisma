@@ -24,6 +24,7 @@ model User {
   accounts     Account[]
   listings     Listing[]
   reservations Reservation[]
+  Ordering     Ordering[]
 }
 
 model Account {
@@ -71,4 +72,13 @@ model Reservation {
 
   user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+}
+
+model Ordering {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  userId   String @db.ObjectId
+  imageSrc String
+  address  String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
