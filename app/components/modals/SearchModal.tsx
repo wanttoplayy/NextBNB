@@ -2,7 +2,7 @@
 
 import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
-import qs from "query-string";
+// import qs from "query-string";
 
 import useSearchModal from "@/app/hooks/useSearchModal";
 import Modal from "./Modal";
@@ -27,24 +27,25 @@ const SearchModal = () => {
     setStep((value) => value + 1);
   }, []);
 
-  const onSubmit = useCallback(async () => {
-    if (step !== STEPS.KEYWORD) {
-      return onNext();
-    }
+  // const onSubmit = useCallback(async () => {
+  //   if (step !== STEPS.KEYWORD) {
+  //     return onNext();
+  //   }
 
-    const query = qs.stringify({ keyword });
+  //   // const query = qs.stringify({ keyword });
 
-    const url = qs.stringifyUrl({
-      url: "/",
-      query,
-    });
+  //   // const url = qs.stringifyUrl({
+  //   //   url: "/",
+  //   //   query,
+  //   // });
 
-    searchModal.onClose();
-    router.push(url);
-  }, [step, searchModal, keyword, router, onNext]);
+  //   searchModal.onClose();
+  //   router.push(url);
+  // }, [step, searchModal, keyword, router, onNext]);
 
   const actionLabel = "Search";
-  const secondaryActionLabel = step === STEPS.KEYWORD ? undefined : "Back";
+  const secondaryActionLabel =
+    step === STEPS.KEYWORD ? undefined : "Back";
 
   let bodyContent = (
     <div className="flex flex-col gap-8">
@@ -68,9 +69,11 @@ const SearchModal = () => {
       isOpen={searchModal.isOpen}
       title="Search"
       actionLabel={actionLabel}
-      onSubmit={onSubmit}
+      // onSubmit={onSubmit}
       secondaryActionLabel={secondaryActionLabel}
-      secondaryAction={step === STEPS.KEYWORD ? undefined : onBack}
+      secondaryAction={
+        step === STEPS.KEYWORD ? undefined : onBack
+      }
       onClose={searchModal.onClose}
       body={bodyContent}
     />
