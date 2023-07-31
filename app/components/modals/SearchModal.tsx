@@ -36,7 +36,7 @@ const SearchModal = () => {
 
     const url = qs.stringifyUrl({
       url: "/",
-      query,
+      query: { q: query },
     });
 
     searchModal.onClose();
