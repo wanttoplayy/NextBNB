@@ -10,7 +10,7 @@ import useVerifyPaymentAndAddressModal from "@/app/hooks/useVerifyPaymentAndAddr
 import useAddItemModal from "@/app/hooks/useAddItemModal";
 import { signOut } from "next-auth/react";
 import { SafeUser } from "@/app/types";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 interface UserMenuProps {
   currentUser?: SafeUser | null;
@@ -43,7 +43,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
       return loginModal.onOpen();
     }
     router.push("/basket");
-  }, [currentUser, loginModal, router]);
+  }, [currentUser, loginModal]);
 
   return (
     <div className="relative">
