@@ -1,6 +1,10 @@
 "use client";
 
-import { SafeListing, SafeReservation, SafeUser } from "@/app/types";
+import {
+  SafeListing,
+  SafeReservation,
+  SafeUser,
+} from "@/app/types";
 import { Listing, Reservation } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useCallback, useMemo } from "react";
@@ -15,7 +19,7 @@ interface ListingCardProps {
   onAction?: (id: string) => void;
   disabled?: boolean;
   actionLabel?: string;
-  actionId?: string;
+  actionId?: string | undefined;
   currentUser?: SafeUser | null;
 }
 
@@ -38,7 +42,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
         return;
       }
 
-      onAction?.(actionId);
+      onAction?.(actionId || "");
     },
     [disabled, onAction, actionId]
   );
@@ -97,13 +101,22 @@ const ListingCard: React.FC<ListingCardProps> = ({
         "
           />
           <div className="absolute top-3 right-3">
-            <HeartButton listingId={data.id} currentUser={currentUser} />
+            <HeartButton
+              listingId={data.id}
+              currentUser={currentUser}
+            />
           </div>
         </div>
-        <div className="font-semibold text-xl">{itemTitle}</div>
-        <div className="font-light text-neutral-500">{itemCategory}</div>
+        <div className="font-semibold text-xl">
+          {itemTitle}
+        </div>
+        <div className="font-light text-neutral-500">
+          {itemCategory}
+        </div>
         <div className="font-semibold">฿ {price}</div>
-        <div className="font-semibold">สินค้าทั้งหมด {itemQuantity} ชิ้น</div>
+        <div className="font-semibold">
+          สินค้าทั้งหมด {itemQuantity} ชิ้น
+        </div>
       </div>
       {onAction && actionLabel && (
         <Button
