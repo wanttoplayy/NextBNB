@@ -1,29 +1,26 @@
 import prisma from "@/app/libs/prismadb";
 
 export interface IOrderingsParams {
-  imageSrc?: string;
-  address?: string;
+  userId?: string;
+  category?: string;
 }
 
 export default async function getOrderings(params: IOrderingsParams) {
   try {
-    const { imageSrc, address } = params || {}; // Provide a default empty object if params is undefined
+    const { userId, category } = params;
 
     let query: any = {};
 
-    if (imageSrc) {
-      query.userId = imageSrc;
+    if (userId) {
+      query.userId = userId;
     }
 
-    if (address) {
-      query.category = address;
+    if (category) {
+      query.category = category;
     }
 
     const orderings = await prisma.ordering.findMany({
       where: query,
-      include: {
-        Ordering: true,
-      },
       orderBy: {
         imageSrc: "desc",
       },
@@ -31,10 +28,10 @@ export default async function getOrderings(params: IOrderingsParams) {
 
     const safeOrderings = orderings.map((ordering) => ({
       ...ordering,
-      ordering: ordering.imageSrc.toISOString(),
+      createdAt: ordering.imageSrc.toString(),
       // quantity: listing.quantity ?? 0, // Assign a default value of 0 if quantity is null
     }));
-    return safeOrderings; // Return safeOrderings instead of orderings
+    return safeOrderings;
   } catch (error: any) {
     throw new Error(error);
   }
