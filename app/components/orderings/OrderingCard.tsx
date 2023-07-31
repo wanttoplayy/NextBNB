@@ -10,17 +10,22 @@ interface OrderingCardProps {
   data: Ordering;
 }
 
-const OrderingCard: React.FC<OrderingCardProps> = ({ data }) => {
+const OrderingCard: React.FC<OrderingCardProps> = ({
+  data,
+}) => {
   const router = useRouter();
 
-  const handleCancel = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    // Handle cancellation logic here
-  }, []);
+  const handleCancel = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.stopPropagation();
+      // Handle cancellation logic here
+    },
+    []
+  );
 
   const slip = useMemo(() => {
     return data.imageSrc;
-  }, []);
+  }, [data.imageSrc]);
 
   return (
     <div
@@ -35,8 +40,12 @@ const OrderingCard: React.FC<OrderingCardProps> = ({ data }) => {
             className="object-cover h-full w-full group-hover:scale-110 transition"
           />
         </div>
-        <div className="font-semibold">฿ {data.imageSrc}</div>
-        <div className="font-semibold">฿ {data.address}</div>
+        <div className="font-semibold">
+          ฿ {data.imageSrc}
+        </div>
+        <div className="font-semibold">
+          ฿ {data.address}
+        </div>
       </div>
     </div>
   );

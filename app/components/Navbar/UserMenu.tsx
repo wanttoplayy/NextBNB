@@ -10,18 +10,21 @@ import useVerifyPaymentAndAddressModal from "@/app/hooks/useVerifyPaymentAndAddr
 import useAddItemModal from "@/app/hooks/useAddItemModal";
 import { signOut } from "next-auth/react";
 import { SafeUser } from "@/app/types";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 
 interface UserMenuProps {
   currentUser?: SafeUser | null;
 }
 
-const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
+const UserMenu: React.FC<UserMenuProps> = ({
+  currentUser,
+}) => {
   const router = useRouter();
   const registerModal = useRegisterModal();
   const loginModal = useLoginModal();
   const addItemModal = useAddItemModal();
-  const verifyPaymentAndAddressModal = useVerifyPaymentAndAddressModal();
+  const verifyPaymentAndAddressModal =
+    useVerifyPaymentAndAddressModal();
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleOpen = useCallback(() => {
@@ -40,7 +43,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
       return loginModal.onOpen();
     }
     router.push("/basket");
-  }, [currentUser, loginModal]);
+  }, [currentUser, loginModal, router]);
 
   return (
     <div className="relative">
@@ -121,7 +124,9 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
                   label="สถานะการจัดส่ง/Parcel status"
                 />
                 <MenuItem
-                  onClick={verifyPaymentAndAddressModal.onOpen}
+                  onClick={
+                    verifyPaymentAndAddressModal.onOpen
+                  }
                   label="ยืนยันการชำระเงิน และปลายทางจัดส่ง/Verrifypayment and address"
                 />
                 <hr />

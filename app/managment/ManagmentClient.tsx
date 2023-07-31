@@ -19,10 +19,13 @@ interface ManagmentClientProps {
   orderings: Ordering;
 }
 
-const ManagmentClient: React.FC<ManagmentClientProps> = ({ orderings }) => {
+const ManagmentClient: React.FC<ManagmentClientProps> = ({
+  orderings,
+}) => {
   const router = useRouter();
   const [deletingId, setDeletingId] = useState("");
-  const verifyPaymentAndAddressModal = useVerifyPaymentAndAddressModal();
+  const verifyPaymentAndAddressModal =
+    useVerifyPaymentAndAddressModal();
 
   return (
     <Container>
@@ -45,7 +48,10 @@ const ManagmentClient: React.FC<ManagmentClientProps> = ({ orderings }) => {
         "
         >
           {orderings.map((ordering: any) => (
-            <OrderingCard data={ordering.imageSrc} />
+            <OrderingCard
+              key={ordering}
+              data={ordering.imageSrc}
+            />
           ))}
         </div>
         <div className="flex flex-col h-[200px] w-[300px] mt-[100px]"></div>
