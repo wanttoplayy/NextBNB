@@ -1,6 +1,10 @@
 "use client";
 
-import { SafeListing, SafeReservation, SafeUser } from "@/app/types";
+import {
+  SafeListing,
+  SafeReservation,
+  SafeUser,
+} from "@/app/types";
 import useLoginModal from "@/app/hooks/useLoginModal";
 import { useRouter } from "next/navigation";
 import { useCallback, useMemo, useState } from "react";
@@ -29,7 +33,9 @@ const ListingClient: React.FC<ListingClientProps> = ({
   const loginModal = useLoginModal();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const [totalPrice, setTotalPrice] = useState(listing.price);
+  const [totalPrice, setTotalPrice] = useState(
+    listing.price
+  );
   const [quantity, setQuantity] = useState(1);
 
   const onQuantityChange = (value: number) => {
@@ -38,7 +44,9 @@ const ListingClient: React.FC<ListingClientProps> = ({
   };
 
   const category = useMemo(() => {
-    return categories.find((items) => items.label === listing.category);
+    return categories.find(
+      (items) => items.label === listing.category
+    );
   }, [listing.category]);
 
   const onCreateReservation = useCallback(() => {
@@ -69,7 +77,16 @@ const ListingClient: React.FC<ListingClientProps> = ({
       .finally(() => {
         setIsLoading(false);
       });
-  }, [totalPrice, listing?.id, router, currentUser, loginModal]);
+  }, [
+    totalPrice,
+    listing?.id,
+    router,
+    currentUser,
+    loginModal,
+    listing.category,
+    listing.title,
+    quantity,
+  ]);
 
   return (
     <Container>

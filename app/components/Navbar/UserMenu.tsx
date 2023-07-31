@@ -16,12 +16,15 @@ interface UserMenuProps {
   currentUser?: SafeUser | null;
 }
 
-const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
+const UserMenu: React.FC<UserMenuProps> = ({
+  currentUser,
+}) => {
   const router = useRouter();
   const registerModal = useRegisterModal();
   const loginModal = useLoginModal();
   const addItemModal = useAddItemModal();
-  const verifyPaymentAndAddressModal = useVerifyPaymentAndAddressModal();
+  const verifyPaymentAndAddressModal =
+    useVerifyPaymentAndAddressModal();
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleOpen = useCallback(() => {
@@ -128,7 +131,9 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
                   label="สถานะการจัดส่ง/Parcel status"
                 />
                 <MenuItem
-                  onClick={verifyPaymentAndAddressModal.onOpen}
+                  onClick={
+                    verifyPaymentAndAddressModal.onOpen
+                  }
                   label="ยืนยันการชำระเงิน และปลายทางจัดส่ง/Verrifypayment and address"
                 />
                 <hr />
