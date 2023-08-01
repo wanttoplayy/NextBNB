@@ -15,12 +15,17 @@ const BasketPage = async () => {
   if (!currentUser) {
     return (
       <ClientOnly>
-        <EmptyState title="Unauthorized" subtitle="Please login" />
+        <EmptyState
+          title="Unauthorized"
+          subtitle="Please login"
+        />
       </ClientOnly>
     );
   }
 
-  const reservations = await getReservations({ userId: currentUser.id });
+  const reservations = await getReservations({
+    userId: currentUser.id,
+  });
 
   if (reservations.length === 0) {
     return (
@@ -35,7 +40,10 @@ const BasketPage = async () => {
 
   return (
     <ClientOnly>
-      <BasketClient reservations={reservations} currentUser={currentUser} />
+      <BasketClient
+        reservations={reservations}
+        currentUser={currentUser}
+      />
       {/* <Button label="ชำระเงิน" onClick={verifyPaymentAndAddressModal.onOpen} /> */}
     </ClientOnly>
   );

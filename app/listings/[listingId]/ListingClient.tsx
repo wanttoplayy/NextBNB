@@ -18,7 +18,7 @@ import toast from "react-hot-toast";
 import Input from "@/app/components/Inputs/Input";
 
 interface ListingClientProps {
-  reservations?: SafeReservation;
+  reservations?: SafeReservation[];
   listing: SafeListing & {
     user: SafeUser;
   };
